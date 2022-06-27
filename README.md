@@ -34,12 +34,14 @@ nlp_structure_virtual_id
 │run.sh # 执行规则分类结构化主程序
 │README.md # 说明文档
 ```
+
 + 依赖版本
 ```angular2
 python 3.7.4
     pyspark 3.2.0
     toml 0.10.2
 ```
+
 + 部署流程
     + 基于config.toml文件执行如下命令生成建表语句并完成表创建
     ```
@@ -69,6 +71,24 @@ python3 ner_check.py virtualid_20220623_tmp.txt virtualid_20220623.txt
 # 上传到认知平台
 curl -H 'Content-Type: multipart/form-data' -F "file=@virtualid_20220623.txt" "http://10.30.103.146:8080/nlp/file/upload/1097"
 ```
+
++ 规则开发
+    + **获取目标文本**：使用APP名称匹配，app_name 或 suspected_app_name
+    + **抽取话术规则**：使用反向排除法，穷极目标文本的话术
+    + **需要特别注意**，hive正则中转义符号前加双斜杠“\\”，python正则中转义符号前面加单斜杠“\”
+    + 反向排除法
+    + 定义：
+        + 确保规则可以有效穷尽目标数据中话术的策略：
+    + 内容：
+        + 关键词获取目标数据
+        + 寻找话术，提炼正则
+        + while 过滤后的目标数据中仍然存在我们需要的话术
+            + 寻找话术，提炼正则
+            + 将目标数据用反向正则过滤
+        + 提炼的规则已穷尽所有话术
+    + 常用工具
+        + ![正则核验工具](https://c.runoob.com/front-end/854/)
+        + ![正则表达式样例](https://blog.csdn.net/qq_28633249/article/details/77686976)
 
 + 注意事项
     + 如果shell脚本在win下压缩后存在doc与unix不兼容问题,在Linux下将run.sh与data_extractor.sh格式转换,进入命令行操作模式:set ff=unix
