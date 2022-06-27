@@ -59,5 +59,16 @@ python 3.7.4
     sh run_random_date.sh 30 2021-01-01 2022-01-01
     nohup sh run_random_date.sh 10 2021-01-01 2022-01-01 > output.log 2>&1 &
 
++ 数据核验
+```bash
+#!/usr/bin/bash
+ # 从hive读取数据写入txt
+sh hive2txt.sh
+# 见txt转化成BIO格式的数据
+python3 ner_check.py virtualid_20220623_tmp.txt virtualid_20220623.txt
+# 上传到认知平台
+curl -H 'Content-Type: multipart/form-data' -F "file=@virtualid_20220623.txt" "http://10.30.103.146:8080/nlp/file/upload/1097"
+```
+
 + 注意事项
     + 如果shell脚本在win下压缩后存在doc与unix不兼容问题,在Linux下将run.sh与data_extractor.sh格式转换,进入命令行操作模式:set ff=unix
